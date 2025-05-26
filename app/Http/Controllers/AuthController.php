@@ -11,7 +11,12 @@ class AuthController
         $this->authService = $authService;
     }
 
-    
+
+    public function register(StoreUserRequest $request){
+        return $this->authService->register( $request->toDTO() );
+    }
+
+
 
     
 
