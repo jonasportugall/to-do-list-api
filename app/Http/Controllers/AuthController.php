@@ -13,7 +13,8 @@ class AuthController
 
 
     public function register(StoreUserRequest $request){
-        return $this->authService->register( $request->toDTO() );
+        $response = $this->authService->register( $request->toDTO() );
+        return response()->json($response, 201);
     }
 
 
