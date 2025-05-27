@@ -3,7 +3,9 @@
 namespace App\Services;
 use App\Interfaces\UserRepositoryInterface;
 use App\DTOs\StoreUserDTO;
+use App\DTOs\LoginDTO;
 use App\Models\User;
+use Illuminate\Support\Facades\Hash;
 
 class AuthService{
 
@@ -13,7 +15,25 @@ class AuthService{
         $this->userRepositoryInterface = $userRepositoryInterface;
     }
 
-    public function register(StoreUserDTO $storeUserDTO){
+    public function login(LoginDTO $loginDTO)
+    {
+        $user = $this->userRepositoryInterface->getUserByEmail($loginDTO->email);
+    
+        if (!$user || !Hash::check($loginDTO->password, $user->password)) {
+            throw new \RuntimeException('Invalid credentials');
+        }
+    
+        $token = $this->generateUserAccessToken($user);
+    
+        return [
+            'user'  => $user->only(['id','name','email']),
+            'token' => $token
+        ];
+    }
+    
+
+    public function register(StoreUserDTO $storeUserDTO)
+    {
         $user = $this->userRepositoryInterface->store( $storeUserDTO );
         $accessToken = $this->generateUserAccessToken( $user ); //To do authomatically login after register of user
         

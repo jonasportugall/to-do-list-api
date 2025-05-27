@@ -6,4 +6,5 @@ use App\DTOs\StoreUserDTO;
 
 interface UserRepositoryInterface{
     public function store(StoreUserDTO $storeUserDTO);
+    public function getUserByEmail(string $email);
 }

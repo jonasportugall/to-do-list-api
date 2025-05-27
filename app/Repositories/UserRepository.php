@@ -14,4 +14,8 @@ class UserRepository implements UserRepositoryInterface{
             'password' => bcrypt($storeUserDTO->password),
         ]);
     }
+
+    public function getUserByEmail(string $email){
+        return User::where('email',$email)->first();
+    }
 }
