@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 use App\Services\AuthService;
 use App\Http\Requests\StoreUserRequest;
+use App\Http\Requests\LoginRequest;
 
 class AuthController
 {
@@ -12,6 +13,9 @@ class AuthController
         $this->authService = $authService;
     }
 
+    public function login(){
+
+    }
 
     public function register(StoreUserRequest $request){
         $response = $this->authService->register( $request->toDTO() );
