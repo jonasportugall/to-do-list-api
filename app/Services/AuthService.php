@@ -31,16 +31,20 @@ class AuthService{
         ];
     }
     
-
     public function register(StoreUserDTO $storeUserDTO)
     {
-        $user = $this->userRepositoryInterface->store( $storeUserDTO );
-        $accessToken = $this->generateUserAccessToken( $user ); //To do authomatically login after register of user
-        
-        return [
-            'user'  => $user->only(['id','name','email']),
-            'token' => $accessToken
-        ];
+        try {
+            $user = $this->userRepositoryInterface->store($storeUserDTO);
+
+            $accessToken = $this->generateUserAccessToken($user);
+
+            return [
+                'user'  => $user->only(['id', 'name', 'email']),
+                'token' => $accessToken
+            ];
+        } catch (\Exception $e) {
+            throw new \RuntimeException('Failed to register user: ' . $e->getMessage(), 500);
+        }
     }
 
     public function generateUserAccessToken(User $user){

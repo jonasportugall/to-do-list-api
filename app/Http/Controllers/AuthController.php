@@ -15,7 +15,7 @@ class AuthController
 
     public function login(LoginRequest $request){
         try {
-            
+
             $response = $this->authService->login($request->toDTO());
             return response()->json($response, 200);
 
@@ -29,15 +29,19 @@ class AuthController
         }
     }
 
-    public function register(StoreUserRequest $request){
-        $response = $this->authService->register( $request->toDTO() );
-        return response()->json($response, 201);
+    public function register(StoreUserRequest $request)
+    {
+        try {
+            $response = $this->authService->register($request->toDTO());
+            return response()->json($response, 201);
+            
+        } catch (\RuntimeException $e) {
+            return response()->json([
+                'message' => 'Registration failed',
+                'error_cause' => $e->getMessage()
+            ], 500);
+        }
     }
-
-
-
-    
-
 
 
 }
