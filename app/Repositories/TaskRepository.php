@@ -6,6 +6,7 @@ use App\Interfaces\TaskRepositoryInterface;
 use App\DTOs\StoreTaskDTO;
 
 class TaskRepository implements TaskRepositoryInterface{
+    
     public function store(StoreTaskDTO $storeTaskDTO,$userId){
         return Task::create([
             'title' => $storeTaskDTO->title,
@@ -13,5 +14,9 @@ class TaskRepository implements TaskRepositoryInterface{
             'status'=>'pending',
             'user_id'=>$userId
         ]);
+    }
+
+    public function getAll($userId){
+        return Task::where('user_id' , $userId)->get();
     }
 }

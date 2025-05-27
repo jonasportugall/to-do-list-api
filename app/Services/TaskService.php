@@ -25,6 +25,17 @@ class TaskService{
         }
     }
 
+    public function getAll()
+    {
+        try {
+            $userId = Auth::user()->id;
+            return $this->taskRepositoryInterface->getAll($userId);
+        } catch (\Exception $e) {
+            throw new \RuntimeException('Failed to retrieve tasks: ' . $e->getMessage(), 500);
+        }
+    }
+
+
 
 
 }

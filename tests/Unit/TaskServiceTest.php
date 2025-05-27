@@ -44,4 +44,32 @@ class TaskServiceTest extends TestCase
         $this->assertEquals('Same Description Task', $result->description);                
 
     }
+
+    public function test_get_all_tasks_for_authenticated_user()
+    {
+        $fakeUserId = 'uuid-fake-id';
+        $fakeTasks = collect([
+            new Task(['id' => 'task-1', 'title' => 'Task One', 'description' => 'Desc One']),
+            new Task(['id' => 'task-2', 'title' => 'Task Two', 'description' => 'Desc Two']),
+        ]);
+
+        Auth::shouldReceive('user')->andReturn((object)['id' => 'uuid-fake-id']);
+
+        $taskRepositoryMock = Mockery::mock(TaskRepositoryInterface::class);
+        $taskRepositoryMock->shouldReceive('getAll')
+            ->with($fakeUserId)
+            ->andReturn($fakeTasks);
+
+        $taskService = new TaskService($taskRepositoryMock);
+
+        $result = $taskService->getAll();
+
+        $this->assertEquals($fakeTasks, $result);
+    }
+
+    public function tearDown(): void
+    {
+        Mockery::close();
+        parent::tearDown();
+    }
 }

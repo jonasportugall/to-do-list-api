@@ -21,9 +21,7 @@ class TaskController extends Controller
             
             $task = $this->taskService->store($request->toDTO());
 
-            return response()->json([
-                'task' => $task,
-            ], 201);
+            return response()->json(['task' => $task], 201);
 
         } catch (\Exception $e) {
             return response()->json([
@@ -32,5 +30,17 @@ class TaskController extends Controller
             ], 500);
         }
     }
+
+    public function getAll()
+    {
+        try {
+            $tasks = $this->taskService->getAll();
+            return response()->json($tasks, 200);
+        } catch (\Exception $e) {
+            return response()->json(['error' => 'An unexpected error occurred.'], 500);
+        }
+    }
+
+
 
 }
