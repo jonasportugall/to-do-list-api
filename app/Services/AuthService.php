@@ -1,19 +1,19 @@
 <?php
 
 namespace App\Services;
-use App\Interfaces\UserInterface;
+use App\Interfaces\UserRepositoryInterface;
 use App\DTOs\StoreUserDTO;
 
 class AuthService{
 
-    private $userInterface;
+    private $userRepositoryInterface;
 
-    public function __construct(UserInterface $userInterface){
-        $this->userInterface = $userInterface;
+    public function __construct(userRepositoryInterface $userRepositoryInterface){
+        $this->userRepositoryInterface = $userRepositoryInterface;
     }
 
     public function register(StoreUserDTO $storeUserDTO){
-        $user = $this->userInterface->store( $storeUserDTO );
+        $user = $this->userRepositoryInterface->store( $storeUserDTO );
         $accessToken = $this->generateUserAccessToken( $user ); //To do authomatically login after register of user
         
         return [

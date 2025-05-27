@@ -1,14 +1,14 @@
 <?php
 
 namespace App\Services;
-use App\Interfaces\TaskInterface;
+use App\Interfaces\TaskRepositoryInterface;
 
 class TaskService{
 
-    private $taskInterface;
+    private $taskRepositoryInterface;
 
-    public function __construct(TaskInterface $taskInterface){
-        $this->taskInterface = $taskInterface;
+    public function __construct(TaskRepositoryInterface $taskRepositoryInterface){
+        $this->taskRepositoryInterface = $taskRepositoryInterface;
     }
 
 

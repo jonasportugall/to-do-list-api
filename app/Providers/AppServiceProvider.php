@@ -6,8 +6,8 @@ use Illuminate\Support\ServiceProvider;
 use App\Models\PersonalAccessToken;
 use Laravel\Sanctum\Sanctum;
 
-use App\Interfaces\TaskInterface;
-use App\Interfaces\UserInterface;
+use App\Interfaces\UserRepositoryInterface;
+use App\Interfaces\TaskRepositoryInterface;
 
 use App\Repositories\TaskRepository;
 use App\Repositories\UserRepository;
@@ -19,8 +19,8 @@ class AppServiceProvider extends ServiceProvider
      */
     public function register(): void
     {
-        $this->app->bind(TaskInterface::class,TaskRepository::class);  
-        $this->app->bind(UserInterface::class,UserRepository::class); 
+        $this->app->bind(TaskRepositoryInterface::class,TaskRepository::class);  
+        $this->app->bind(UserRepositoryInterface::class,UserRepository::class); 
     }
 
     /**

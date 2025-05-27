@@ -4,6 +4,6 @@ namespace App\Interfaces;
 use App\Models\User;
 use App\DTOs\StoreUserDTO;
 
-interface UserInterface{
+interface UserRepositoryInterface{
     public function store(StoreUserDTO $storeUserDTO);
 }
