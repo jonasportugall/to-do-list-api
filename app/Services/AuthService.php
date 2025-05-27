@@ -3,6 +3,7 @@
 namespace App\Services;
 use App\Interfaces\UserRepositoryInterface;
 use App\DTOs\StoreUserDTO;
+use App\Models\User;
 
 class AuthService{
 
@@ -22,7 +23,7 @@ class AuthService{
         ];
     }
 
-    private function generateUserAccessToken(User $user){
+    public function generateUserAccessToken(User $user){
         return $user->createToken('auth_access_token')->plainTextToken;
     }
 
