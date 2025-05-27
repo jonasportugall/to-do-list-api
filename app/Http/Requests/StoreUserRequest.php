@@ -46,7 +46,7 @@ class StoreUserRequest extends FormRequest
             'password.required' => 'A senha é obrigatória.',
             'password.string' => 'A senha deve ser uma sequência de caracteres.',
             'password.min' => 'A senha deve ter pelo menos 8 caracteres.',
-            'password.confirmed' => 'A confirmação da senha não confere.',
+            'password.confirmed' => 'A confirmação da senha não corresponde.',
         ];
     }
 

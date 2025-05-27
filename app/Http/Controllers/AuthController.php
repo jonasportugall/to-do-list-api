@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 use App\Services\AuthService;
+use App\Http\Requests\StoreUserRequest;
 
 class AuthController
 {
