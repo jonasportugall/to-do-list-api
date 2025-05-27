@@ -16,6 +16,7 @@ return new class extends Migration
             $table->uuid('id')->primary();
             $table->string('title');
             $table->string('description')->nullable();
+            $table->enum('status',['pending','in_progress','completed','cancelled']);
             $table->foreignUuid('user_id')->constrained()->cascadeOnDelete();
             $table->timestamps();
         });
