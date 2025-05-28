@@ -6,6 +6,7 @@ use App\DTOs\StoreUserDTO;
 use App\DTOs\LoginDTO;
 use App\Models\User;
 use Illuminate\Support\Facades\Hash;
+use App\Exceptions\InvalidCredentialsException;
 
 class AuthService{
 
@@ -20,15 +21,12 @@ class AuthService{
         $user = $this->userRepositoryInterface->getUserByEmail($loginDTO->email);
     
         if (!$user || !Hash::check($loginDTO->password, $user->password)) {
-            throw new \RuntimeException('Invalid credentials');
+            throw new InvalidCredentialsException();
         }
     
         $token = $this->generateUserAccessToken($user);
     
-        return [
-            'user'  => $user->only(['id','name','email']),
-            'token' => $token
-        ];
+        return ['user'  => $user->only(['id','name','email']), 'token' => $token];
     }
     
     public function register(StoreUserDTO $storeUserDTO)
