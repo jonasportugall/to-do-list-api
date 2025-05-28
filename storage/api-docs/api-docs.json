@@ -160,6 +160,87 @@
                     }
                 }
             }
+        },
+        "/api/tasks": {
+            "post": {
+                "tags": [
+                    "Tasks"
+                ],
+                "summary": "Criar uma nova tarefa",
+                "description": "Endpoint para criar uma nova tarefa",
+                "operationId": "f803ebdb2300acdb7e93bbe8d0b9a2e8",
+                "requestBody": {
+                    "required": true,
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "required": [
+                                    "title"
+                                ],
+                                "properties": {
+                                    "title": {
+                                        "type": "string",
+                                        "maxLength": 255,
+                                        "minLength": 3,
+                                        "example": "Comprar leite"
+                                    },
+                                    "description": {
+                                        "type": "string",
+                                        "maxLength": 500,
+                                        "minLength": 3,
+                                        "example": "Ir ao supermercado e comprar leite integral"
+                                    }
+                                },
+                                "type": "object"
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "201": {
+                        "description": "Tarefa criada com sucesso",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "properties": {
+                                        "id": {
+                                            "type": "integer",
+                                            "example": 1
+                                        },
+                                        "title": {
+                                            "type": "string",
+                                            "example": "Comprar leite"
+                                        },
+                                        "description": {
+                                            "type": "string",
+                                            "example": "Ir ao supermercado e comprar leite integral"
+                                        },
+                                        "created_at": {
+                                            "type": "string",
+                                            "format": "date-time",
+                                            "example": "2025-05-28T10:00:00Z"
+                                        },
+                                        "updated_at": {
+                                            "type": "string",
+                                            "format": "date-time",
+                                            "example": "2025-05-28T10:00:00Z"
+                                        }
+                                    },
+                                    "type": "object"
+                                }
+                            }
+                        }
+                    },
+                    "422": {
+                        "description": "Dados inválidos"
+                    }
+                },
+                "security": [
+                    {
+                        "sanctum": []
+                    }
+                ]
+            }
         }
     },
     "components": {
@@ -178,6 +259,10 @@
         {
             "name": "Auths",
             "description": "Auths"
+        },
+        {
+            "name": "Tasks",
+            "description": "Tasks"
         }
     ]
 }
