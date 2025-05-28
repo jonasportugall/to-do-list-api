@@ -41,12 +41,19 @@ class TaskService{
 
         return $task;
     }
+    
     public function delete($taskId)
     {
         $task = $this->taskRepositoryInterface->getTaskById($taskId);
         if(!$task)throw new TaskNotFoundException();
 
         $this->taskRepositoryInterface->delete($task);
+    }
+
+    public function filterByStatus($status)
+    {
+        $userId = Auth::user()->id;
+        return $this->taskRepositoryInterface->getAllByStatusAndUserId($status,$userId);
     }
 
 

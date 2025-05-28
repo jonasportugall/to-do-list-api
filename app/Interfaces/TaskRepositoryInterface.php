@@ -11,4 +11,5 @@ interface TaskRepositoryInterface{
     public function save(Task $task);
     public function getTaskById( $taskId );
     public function delete(Task $taskId);
+    public function getAllByStatusAndUserId($status,$userId);
 }

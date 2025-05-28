@@ -39,4 +39,10 @@ class TaskController extends Controller
         return response()->json('Task deleted successful', 200);
     }
 
+    public function filterByStatus($status)
+    {
+        $tasks = $this->taskService->filterByStatus($status);
+        return response()->json($tasks, 200);
+    }
+
 }

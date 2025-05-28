@@ -118,6 +118,34 @@ class TaskServiceTest extends TestCase
         $this->assertTrue(true);
     }
 
+    public function test_filter_by_status_returns_tasks_for_authenticated_user()
+    {
+        $status = 'completed';
+        $userId = 10;
+
+        $task1 = new Task(['title' => 'Task 1', 'status' => $status]);
+        $task2 = new Task(['title' => 'Task 2', 'status' => $status]);
+        $fakeTasks = collect([$task1, $task2]);
+
+        $taskRepositoryMock = Mockery::mock(TaskRepositoryInterface::class);
+        $taskRepositoryMock
+            ->shouldReceive('getAllByStatusAndUserId')
+            ->once()
+            ->with($status, $userId)
+            ->andReturn($fakeTasks);
+
+        Auth::shouldReceive('user')->andReturn((object)['id' => $userId]);
+
+        $taskService = new TaskService($taskRepositoryMock);
+
+        $result = $taskService->filterByStatus($status);
+
+        $this->assertCount(2, $result);
+        $this->assertEquals('Task 1', $result[0]->title);
+        $this->assertEquals('Task 2', $result[1]->title);
+    }
+
+
 
     public function tearDown(): void
     {

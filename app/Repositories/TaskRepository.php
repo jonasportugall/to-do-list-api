@@ -32,6 +32,13 @@ class TaskRepository implements TaskRepositoryInterface{
         $task->delete();
     }
 
+    public function getAllByStatusAndUserId($status,$userId){
+        return Task::where('status',$status)
+                   ->where('user_id',$userId)
+                   ->orderBy('created_at','desc')
+                   ->get();
+    }
+
 
 
 }
