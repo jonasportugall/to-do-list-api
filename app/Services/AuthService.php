@@ -12,7 +12,8 @@ class AuthService{
 
     private $userRepositoryInterface;
 
-    public function __construct(userRepositoryInterface $userRepositoryInterface){
+    public function __construct(userRepositoryInterface $userRepositoryInterface)
+    {
         $this->userRepositoryInterface = $userRepositoryInterface;
     }
 
@@ -45,7 +46,8 @@ class AuthService{
         }
     }
 
-    public function generateUserAccessToken(User $user){
+    public function generateUserAccessToken(User $user)
+    {
         return $user->createToken('auth_access_token')->plainTextToken;
     }
 

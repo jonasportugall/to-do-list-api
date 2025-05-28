@@ -12,7 +12,8 @@ class TaskController extends Controller
 {
     private $taskService;
 
-    public function __construct(TaskService $taskService){
+    public function __construct(TaskService $taskService)
+    {
         $this->taskService = $taskService;
     }
 
@@ -34,7 +35,8 @@ class TaskController extends Controller
         return response()->json($task, 200);
     }
 
-    public function delete($taskId){
+    public function delete($taskId)
+    {
         $this->taskService->delete( $taskId );
         return response()->json('Task deleted successful', 200);
     }
