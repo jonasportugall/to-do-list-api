@@ -162,12 +162,68 @@
             }
         },
         "/api/tasks": {
+            "get": {
+                "tags": [
+                    "Tasks"
+                ],
+                "summary": "Retrieve all tasks",
+                "description": "Returns a list of all tasks",
+                "operationId": "d93cb25156461f8acbb5bc28a687013a",
+                "responses": {
+                    "200": {
+                        "description": "List of tasks retrieved successfully",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "type": "array",
+                                    "items": {
+                                        "properties": {
+                                            "id": {
+                                                "type": "integer",
+                                                "example": 1
+                                            },
+                                            "title": {
+                                                "type": "string",
+                                                "example": "Buy groceries"
+                                            },
+                                            "description": {
+                                                "type": "string",
+                                                "example": "Go to the supermarket and buy milk"
+                                            },
+                                            "status": {
+                                                "type": "string",
+                                                "example": "pending"
+                                            },
+                                            "created_at": {
+                                                "type": "string",
+                                                "format": "date-time",
+                                                "example": "2025-05-28T10:00:00Z"
+                                            },
+                                            "updated_at": {
+                                                "type": "string",
+                                                "format": "date-time",
+                                                "example": "2025-05-28T10:00:00Z"
+                                            }
+                                        },
+                                        "type": "object"
+                                    }
+                                }
+                            }
+                        }
+                    }
+                },
+                "security": [
+                    {
+                        "sanctum": []
+                    }
+                ]
+            },
             "post": {
                 "tags": [
                     "Tasks"
                 ],
-                "summary": "Criar uma nova tarefa",
-                "description": "Endpoint para criar uma nova tarefa",
+                "summary": "Create task",
+                "description": "Endpoint to create new task",
                 "operationId": "f803ebdb2300acdb7e93bbe8d0b9a2e8",
                 "requestBody": {
                     "required": true,
@@ -233,6 +289,216 @@
                     },
                     "422": {
                         "description": "Dados inválidos"
+                    }
+                },
+                "security": [
+                    {
+                        "sanctum": []
+                    }
+                ]
+            }
+        },
+        "/api/tasks/{taskId}/status": {
+            "put": {
+                "tags": [
+                    "Tasks"
+                ],
+                "summary": "Update task status",
+                "description": "Updates the status of a task by its ID",
+                "operationId": "cbfdfc61d39167dc783a226b077642e3",
+                "parameters": [
+                    {
+                        "name": "taskId",
+                        "in": "path",
+                        "description": "ID of the task to be updated",
+                        "required": true,
+                        "schema": {
+                            "type": "string"
+                        }
+                    }
+                ],
+                "requestBody": {
+                    "required": true,
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "required": [
+                                    "status"
+                                ],
+                                "properties": {
+                                    "status": {
+                                        "description": "New status for the task",
+                                        "type": "string",
+                                        "enum": [
+                                            "pending",
+                                            "in_progress",
+                                            "completed",
+                                            "cancelled"
+                                        ],
+                                        "example": "completed"
+                                    }
+                                },
+                                "type": "object"
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "200": {
+                        "description": "Task status updated successfully",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "properties": {
+                                        "id": {
+                                            "type": "integer",
+                                            "example": 1
+                                        },
+                                        "title": {
+                                            "type": "string",
+                                            "example": "Buy groceries"
+                                        },
+                                        "description": {
+                                            "type": "string",
+                                            "example": "Go to the supermarket and buy milk"
+                                        },
+                                        "status": {
+                                            "type": "string",
+                                            "example": "completed"
+                                        },
+                                        "created_at": {
+                                            "type": "string",
+                                            "format": "date-time",
+                                            "example": "2025-05-28T10:00:00Z"
+                                        },
+                                        "updated_at": {
+                                            "type": "string",
+                                            "format": "date-time",
+                                            "example": "2025-05-28T12:00:00Z"
+                                        }
+                                    },
+                                    "type": "object"
+                                }
+                            }
+                        }
+                    },
+                    "422": {
+                        "description": "Validation error"
+                    },
+                    "404": {
+                        "description": "Task not found"
+                    }
+                },
+                "security": [
+                    {
+                        "sanctum": []
+                    }
+                ]
+            }
+        },
+        "/api/tasks/{taskId}": {
+            "delete": {
+                "tags": [
+                    "Tasks"
+                ],
+                "summary": "Delete a task",
+                "description": "Deletes a task by its ID",
+                "operationId": "2c17a814a1d479b0506d810bbb362590",
+                "parameters": [
+                    {
+                        "name": "taskId",
+                        "in": "path",
+                        "description": "ID of the task to be deleted",
+                        "required": true,
+                        "schema": {
+                            "type": "string"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Task deleted successfully",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "type": "string"
+                                },
+                                "example": "Task deleted successfully"
+                            }
+                        }
+                    },
+                    "404": {
+                        "description": "Task not found"
+                    }
+                },
+                "security": [
+                    {
+                        "sanctum": []
+                    }
+                ]
+            }
+        },
+        "/api/tasks/status/{status}": {
+            "get": {
+                "tags": [
+                    "Tasks"
+                ],
+                "summary": "Filter tasks by status",
+                "description": "Returns a list of tasks filtered by their status",
+                "operationId": "51f4bf61bb476cef3e1de5f3e55cdbcf",
+                "parameters": [
+                    {
+                        "name": "status",
+                        "in": "path",
+                        "description": "Status of the tasks (e.g., pending, completed)",
+                        "required": true,
+                        "schema": {
+                            "type": "string",
+                            "example": "pending"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Filtered list of tasks by status",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "type": "array",
+                                    "items": {
+                                        "properties": {
+                                            "id": {
+                                                "type": "integer",
+                                                "example": 2
+                                            },
+                                            "title": {
+                                                "type": "string",
+                                                "example": "Do homework"
+                                            },
+                                            "description": {
+                                                "type": "string",
+                                                "example": "Math and science assignments"
+                                            },
+                                            "status": {
+                                                "type": "string",
+                                                "example": "completed"
+                                            },
+                                            "created_at": {
+                                                "type": "string",
+                                                "format": "date-time",
+                                                "example": "2025-05-27T14:20:00Z"
+                                            },
+                                            "updated_at": {
+                                                "type": "string",
+                                                "format": "date-time",
+                                                "example": "2025-05-28T11:00:00Z"
+                                            }
+                                        },
+                                        "type": "object"
+                                    }
+                                }
+                            }
+                        }
                     }
                 },
                 "security": [
