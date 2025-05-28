@@ -2,8 +2,7 @@
 
 namespace App\Http\Controllers;
 
-abstract class Controller
-{
+use Illuminate\Http\Request;
 /**
  * @OA\Info(
  *    title="TO DO LIST  - DOCUMENTATION",
@@ -24,4 +23,7 @@ abstract class Controller
  *     description="Use 'Bearer {token}' to authentication"
  * )
  */
+class SwaggerController extends Controller
+{
 }
+
