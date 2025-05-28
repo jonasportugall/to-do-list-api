@@ -7,6 +7,7 @@ use App\Interfaces\TaskRepositoryInterface;
 use Illuminate\Foundation\Testing\WithFaker;
 use App\Services\TaskService;
 use App\DTOs\StoreTaskDTO;
+use App\DTOs\UpdateTaskStatusDTO;
 use App\Models\Task;
 use Illuminate\Support\Facades\Auth;
 
@@ -14,7 +15,8 @@ use Mockery;
 
 class TaskServiceTest extends TestCase
 {
-    public function test_store_task_of_user_and_return_created_task(){
+    public function test_store_task_of_user_and_return_created_task()
+    {
 
         $dto = new StoreTaskDTO(title:"Same Name Task", description:"Same Description Task");
         $taskRepositoryInterfaceMock = Mockery::mock(TaskRepositoryInterface::class);
@@ -65,6 +67,28 @@ class TaskServiceTest extends TestCase
         $result = $taskService->getAll();
 
         $this->assertEquals($fakeTasks, $result);
+    }
+
+    public function test_update_task_status_and_return_task(){
+        $dto = new UpdateTaskStatusDTO(status:'in_progress');
+        $taskRepositoryInterfaceMock = Mockery::mock(TaskRepositoryInterface::class);
+        $fakeTask = new Task();
+        $fakeTask->title = 'Task';
+        $fakeTask->description = 'Description Task';
+        $fakeTask->status = 'pending';
+        $fakeTask->id = 'uuid-fake-id';
+
+        $taskRepositoryInterfaceMock->shouldReceive('save')->with( $fakeTask )->andReturn($fakeTask);
+        $taskRepositoryInterfaceMock->shouldReceive('getTaskById')->with(1)->andReturn($fakeTask);
+
+        $taskService = new TaskService($taskRepositoryInterfaceMock);
+        $result = $taskService->updateStatus($dto,1);
+
+        $this->assertEquals('uuid-fake-id', $result->id);
+        $this->assertEquals('Task', $result->title);
+        $this->assertEquals('Description Task', $result->description);  
+        $this->assertEquals('in_progress', $result->status);
+
     }
 
     public function tearDown(): void

@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use Illuminate\Http\Request;
 use App\Services\TaskService;
 use App\Http\Requests\StoreTaskRequest;
+use App\Http\Requests\UpdateTaskStatusRequest;
 use App\DTOs\StoreTaskDTO;
 
 class TaskController extends Controller
@@ -21,7 +22,7 @@ class TaskController extends Controller
             
             $task = $this->taskService->store($request->toDTO());
 
-            return response()->json(['task' => $task], 201);
+            return response()->json($task, 201);
 
         } catch (\Exception $e) {
             return response()->json([
@@ -41,6 +42,11 @@ class TaskController extends Controller
         }
     }
 
-
+    public function updateStatus(UpdateTaskStatusRequest $request, $taskId)
+    {
+        $task = $this->taskService->updateStatus($request->toDTO(), $taskId);
+        return response()->json($task, 200);
+        
+    }
 
 }

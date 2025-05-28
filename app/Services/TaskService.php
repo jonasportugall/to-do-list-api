@@ -4,7 +4,9 @@ namespace App\Services;
 use App\Interfaces\TaskRepositoryInterface;
 use App\Http\Requests\StoreTaskRequest;
 use App\DTOs\StoreTaskDTO;
+use App\DTOs\UpdateTaskStatusDTO;
 use Illuminate\Support\Facades\Auth;
+use App\Exceptions\TaskNotFoundException;
 
 class TaskService{
 
@@ -35,7 +37,18 @@ class TaskService{
         }
     }
 
+    public function updateStatus(UpdateTaskStatusDTO $dto, $taskId)
+    {
+        $task = $this->taskRepositoryInterface->getTaskById($taskId);
+        if (!$task) {
+            throw new TaskNotFoundException();
+        }
 
+        $task->status = $dto->status;
+        $this->taskRepositoryInterface->save($task);
+
+        return $task;
+    }
 
 
 }

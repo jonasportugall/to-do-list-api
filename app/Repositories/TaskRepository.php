@@ -19,4 +19,15 @@ class TaskRepository implements TaskRepositoryInterface{
     public function getAll($userId){
         return Task::where('user_id' , $userId)->get();
     }
+
+    public function getTaskById( $taskId ){
+        return Task::where('id',$taskId)->first();
+    }
+
+    public function save($task){
+       return $task->save();
+    }
+
+
+
 }
