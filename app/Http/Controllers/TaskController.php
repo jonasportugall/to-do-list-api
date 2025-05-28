@@ -18,35 +18,25 @@ class TaskController extends Controller
 
     public function store(StoreTaskRequest $request)
     {
-        try {
-            
-            $task = $this->taskService->store($request->toDTO());
-
-            return response()->json($task, 201);
-
-        } catch (\Exception $e) {
-            return response()->json([
-                'message' => 'Creted Task Failed',
-                'error' => $e->getMessage(),
-            ], 500);
-        }
+        $task = $this->taskService->store($request->toDTO());
+        return response()->json($task, 201);
     }
 
     public function getAll()
     {
-        try {
-            $tasks = $this->taskService->getAll();
-            return response()->json($tasks, 200);
-        } catch (\Exception $e) {
-            return response()->json(['error' => 'An unexpected error occurred.'], 500);
-        }
+        $tasks = $this->taskService->getAll();
+        return response()->json($tasks, 200);
     }
 
     public function updateStatus(UpdateTaskStatusRequest $request, $taskId)
     {
         $task = $this->taskService->updateStatus($request->toDTO(), $taskId);
         return response()->json($task, 200);
-        
+    }
+
+    public function delete($taskId){
+        $this->taskService->delete( $taskId );
+        return response()->json('Task deleted successful', 200);
     }
 
 }

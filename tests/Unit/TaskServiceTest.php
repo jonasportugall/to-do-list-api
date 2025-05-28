@@ -91,6 +91,34 @@ class TaskServiceTest extends TestCase
 
     }
 
+    public function test_delete_task()
+    {
+        $taskId = 1;
+        $fakeTask = new Task();
+        $fakeTask->id = $taskId;
+        $fakeTask->title = 'Fake Task';
+
+        $taskRepositoryMock = Mockery::mock(TaskRepositoryInterface::class);
+        
+        $taskRepositoryMock
+            ->shouldReceive('getTaskById')
+            ->once()
+            ->with($taskId)
+            ->andReturn($fakeTask);
+
+        $taskRepositoryMock
+            ->shouldReceive('delete')
+            ->once()
+            ->with($fakeTask);
+
+        $taskService = new TaskService($taskRepositoryMock);
+
+        $taskService->delete($taskId);
+
+        $this->assertTrue(true);
+    }
+
+
     public function tearDown(): void
     {
         Mockery::close();

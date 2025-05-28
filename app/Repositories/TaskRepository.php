@@ -24,8 +24,12 @@ class TaskRepository implements TaskRepositoryInterface{
         return Task::where('id',$taskId)->first();
     }
 
-    public function save($task){
+    public function save(Task $task){
        return $task->save();
+    }
+
+    public function delete(Task $task){
+        $task->delete();
     }
 
 
