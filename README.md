@@ -1,61 +1,292 @@
-<p align="center"><a href="https://laravel.com" target="_blank"><img src="https://raw.githubusercontent.com/laravel/art/master/logo-lockup/5%20SVG/2%20CMYK/1%20Full%20Color/laravel-logolockup-cmyk-red.svg" width="400" alt="Laravel Logo"></a></p>
+# ToDo List API
 
-<p align="center">
-<a href="https://github.com/laravel/framework/actions"><img src="https://github.com/laravel/framework/workflows/tests/badge.svg" alt="Build Status"></a>
-<a href="https://packagist.org/packages/laravel/framework"><img src="https://img.shields.io/packagist/dt/laravel/framework" alt="Total Downloads"></a>
-<a href="https://packagist.org/packages/laravel/framework"><img src="https://img.shields.io/packagist/v/laravel/framework" alt="Latest Stable Version"></a>
-<a href="https://packagist.org/packages/laravel/framework"><img src="https://img.shields.io/packagist/l/laravel/framework" alt="License"></a>
-</p>
+A RESTful API built with Laravel to allow each user to manage their own task list. The API supports user registration, authentication, creating tasks, listing them, updating status, deleting tasks, and filtering by status.
 
-## About Laravel
+---
 
-Laravel is a web application framework with expressive, elegant syntax. We believe development must be an enjoyable and creative experience to be truly fulfilling. Laravel takes the pain out of development by easing common tasks used in many web projects, such as:
+## Features
 
-- [Simple, fast routing engine](https://laravel.com/docs/routing).
-- [Powerful dependency injection container](https://laravel.com/docs/container).
-- Multiple back-ends for [session](https://laravel.com/docs/session) and [cache](https://laravel.com/docs/cache) storage.
-- Expressive, intuitive [database ORM](https://laravel.com/docs/eloquent).
-- Database agnostic [schema migrations](https://laravel.com/docs/migrations).
-- [Robust background job processing](https://laravel.com/docs/queues).
-- [Real-time event broadcasting](https://laravel.com/docs/broadcasting).
+- User registration and login using Laravel Sanctum
+- Create task (title and optional description)
+- List all tasks for the authenticated user
+- Update task status (pending, in_progress, completed, cancelled)
+- Delete a task
+- Filter tasks by status
+- Unit and integration tests using in-memory SQLite
+- API documentation using Swagger (OpenAPI)
 
-Laravel is accessible, powerful, and provides tools required for large, robust applications.
+---
 
-## Learning Laravel
+## Getting Started
 
-Laravel has the most extensive and thorough [documentation](https://laravel.com/docs) and video tutorial library of all modern web application frameworks, making it a breeze to get started with the framework.
+### Requirements
 
-You may also try the [Laravel Bootcamp](https://bootcamp.laravel.com), where you will be guided through building a modern Laravel application from scratch.
+- PHP 8.2 or higher
+- Composer
+- Laravel 12
+- Git
+- SQLite (used for automated tests)
 
-If you don't feel like reading, [Laracasts](https://laracasts.com) can help. Laracasts contains thousands of video tutorials on a range of topics including Laravel, modern PHP, unit testing, and JavaScript. Boost your skills by digging into our comprehensive video library.
+---
 
-## Laravel Sponsors
+## Installation
 
-We would like to extend our thanks to the following sponsors for funding Laravel development. If you are interested in becoming a sponsor, please visit the [Laravel Partners program](https://partners.laravel.com).
+Clone the repository and install dependencies:
 
-### Premium Partners
+```bash
+git clone https://github.com/jonasportugall/To-Do-List-API.git
+cd to-do-list-api
+composer install
+cp .env.example .env (in linux) ou copy .env.example .env (in windows)
+php artisan key:generate
+```
 
-- **[Vehikl](https://vehikl.com)**
-- **[Tighten Co.](https://tighten.co)**
-- **[Kirschbaum Development Group](https://kirschbaumdevelopment.com)**
-- **[64 Robots](https://64robots.com)**
-- **[Curotec](https://www.curotec.com/services/technologies/laravel)**
-- **[DevSquad](https://devsquad.com/hire-laravel-developers)**
-- **[Redberry](https://redberry.international/laravel-development)**
-- **[Active Logic](https://activelogic.com)**
+---
 
-## Contributing
+## Configuration
 
-Thank you for considering contributing to the Laravel framework! The contribution guide can be found in the [Laravel documentation](https://laravel.com/docs/contributions).
+Update the `.env` file with your preferred database settings. Example for MySQL:
 
-## Code of Conduct
+```
+DB_CONNECTION=mysql
+DB_DATABASE=your_database
+DB_USERNAME=your_user
+DB_PASSWORD=your_password
+```
 
-In order to ensure that the Laravel community is welcoming to all, please review and abide by the [Code of Conduct](https://laravel.com/docs/contributions#code-of-conduct).
+---
 
-## Security Vulnerabilities
+## Migrate the Database
 
-If you discover a security vulnerability within Laravel, please send an e-mail to Taylor Otwell via [taylor@laravel.com](mailto:taylor@laravel.com). All security vulnerabilities will be promptly addressed.
+Run the following command to create the necessary tables:
 
-## License
+```bash
+php artisan migrate
+```
 
-The Laravel framework is open-sourced software licensed under the [MIT license](https://opensource.org/licenses/MIT).
+---
+
+## Run the Server
+
+```bash
+php artisan serve
+```
+
+By default, the API will be accessible at:
+
+```
+http://localhost:8000
+```
+
+---
+
+## Authentication
+
+This API uses **Laravel Sanctum** for authentication.
+
+To interact with protected endpoints, you must register and log in to obtain a token. Use this token in the `Authorization` header of your requests.
+
+```
+Authorization: Bearer YOUR_TOKEN
+```
+
+---
+
+## API Endpoints
+
+### Authentication
+
+| Method | Endpoint       | Description           |
+|--------|----------------|-----------------------|
+| POST   | /api/register  | Register a new user   |
+| POST   | /api/login     | Login and get token   |
+
+#### Register
+
+- **Method**: `POST`
+- **URL**: `/api/register`
+- **Body**:
+```json
+{
+  "name": "John Doe",
+  "email": "john@example.com",
+  "password": "secret",
+  "password_confirmation": "secret"
+}
+```
+
+#### Login
+
+- **Method**: `POST`
+- **URL**: `/api/login`
+- **Body**:
+```json
+{
+  "email": "john@example.com",
+  "password": "secret"
+}
+```
+
+**Response**:
+```json
+{
+    "user": {
+        "id": "4e99b4c8-8de4-4b46-b722-641382f1b27c",
+        "name": "John Doe",
+        "email": "john@example.com"
+    },
+    "token": "1dd166e7-4193-4e9f-8ded-b72c37046814|LyRukLVhPBgt4o8O8gla6xQn75LuoKLRurLY3M8rc6d78c0c"
+}
+```
+
+---
+
+### Tasks
+
+| Method | Endpoint                | Description                  |
+|--------|-------------------------|------------------------------|
+| POST   | /api/tasks              | Create a new task            |
+| GET    | /api/tasks              | List all tasks               |
+| PUT    | /api/tasks/{id}/status | Update task status           |
+| DELETE | /api/tasks/{id}        | Delete a task                |
+| GET    | /api/tasks/status/{s}  | Filter tasks by status       |
+
+**All task endpoints require authentication.**
+
+---
+
+## Testing in Postman
+
+### 1. Register User
+
+- **POST** `/api/register`
+```json
+{
+  "name": "Jane Doe",
+  "email": "jane@example.com",
+  "password": "password",
+  "password_confirmation": "password"
+}
+```
+
+### 2. Login User
+
+- **POST** `/api/login`
+```json
+{
+  "email": "jane@example.com",
+  "password": "password"
+}
+```
+
+Save the returned `token`.
+
+---
+
+### 3. Create Task
+
+- **POST** `/api/tasks`
+- **Headers**:
+  - `Authorization: Bearer YOUR_TOKEN`
+  - `Content-Type: application/json`
+  - `Accept: application/json`
+```json
+{
+  "title": "Finish report",
+  "description": "Write and submit the Q2 financial report"
+}
+```
+
+---
+
+### 4. List All Tasks
+
+- **GET** `/api/tasks`
+- **Headers**:
+  - `Authorization: Bearer YOUR_TOKEN`
+  - `Content-Type: application/json`
+  - `Accept: application/json`
+
+---
+
+### 5. Update Task Status
+
+- **PUT** `/api/tasks/{id}/status`
+- Replace `{id}` with the task ID
+- **Headers**:
+  - `Authorization: Bearer YOUR_TOKEN`
+  - `Content-Type: application/json`
+  - `Accept: application/json`
+```json
+{
+  "status": "completed"
+}
+```
+
+Allowed statuses: `pending`, `in_progress`, `completed`, `cancelled`
+
+---
+
+### 6. Delete Task
+
+- **DELETE** `/api/tasks/{id}`
+- Replace `{id}` with the task ID
+- **Headers**:
+  - `Authorization: Bearer YOUR_TOKEN`
+  - `Content-Type: application/json`
+  - `Accept: application/json`
+
+---
+
+### 7. Filter Tasks by Status
+
+- **GET** `/api/tasks/status/{status}`
+- Replace `{status}` with one of the allowed values
+- **Headers**:
+  - `Authorization: Bearer YOUR_TOKEN`
+  - `Content-Type: application/json`
+  - `Accept: application/json`
+
+---
+
+## Run Tests
+
+To run unit and integration tests using SQLite in memory:
+
+```bash
+php artisan test
+```
+
+---
+
+## API Documentation with Swagger
+
+To generate the Swagger documentation:
+
+```bash
+php artisan l5-swagger:generate
+```
+
+Access the documentation at:
+
+```
+http://localhost:8000/api/docs
+```
+
+---
+
+## Project Highlights
+
+- Clean architecture(constrollers, services, repositories, interfaces/contracts, requests, DTOs, Exceptions, etc.)
+- Service layer abstraction for business logic
+- Laravel validation and error handling
+- Meaningful HTTP status codes
+- Fully tested
+- Simple and maintainable codebase
+
+---
+
+## Author
+
+**Jonas C. Portugal**  
+jonascportugal30@gmail.com
